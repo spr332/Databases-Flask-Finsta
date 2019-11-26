@@ -1,0 +1,13 @@
+        SELECT photoID
+        FROM SharedWith NATURAL JOIN BelongTo
+        WHERE owner_username = groupOwner AND
+            (member_username = 'TestUser' or groupOwner = 'TestUser')
+        UNION
+        SELECT photoID
+        FROM Photo
+        WHERE allfollowers = 1 
+            AND photoposter IN 
+            (SELECT username_followed
+             FROM Follow
+             WHERE username_follower = "Testuser"
+                AND followstatus = 1) 
