@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}
+FinstaGram Index title
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-9">
+        <h4><small>Browse. The. PEEPS.</small></h4>
+        <hr>
+        <table class="table table-striped">
+            <th>Person</th>
+            <th>      </th>
+            {% for person in data%}
+                <tr>
+                    <td>{{person.username}} </td>
+                    <td>
+                        <span class="input-group-btn">
+                          <form action="/addfollower" method="POST">
+                          <button class="btn btn-default" name="fren" value="{{person.username}}" type="submit">
+                            ADD
+                          </button>
+                          </form>
+                        </span>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}
+FinstaGram GROUPS
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-9">
+        <h4><small>Browse. The. GROUPS.</small></h4>
+        <hr>
+        <table class="table table-striped">
+            <th>Your Groups</th>
+            <th>      </th>
+            {% for item in data%}
+                <tr>
+                    <td>{{item.groupName}} </td>
+                    <td>
+                        <span class="input-group-btn">
+                          <form action="/modifyGroup" method="POST">
+                          <button class="btn btn-default" name="fren" value="{{item.groupName}}" type="submit">
+                            Details
+                          </button>
+                          </form>
+                        </span>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+            <form action="/makegroup" method="POST">
+            <h4>New Group</h4>
+            <input type="text" class="form-control" name="groupname" placeholder="Group Name" required/>
+            <input type="text" class="form-control" name="desc" placeholder="Description" required/>
+            <button class="btn btn-default" type="submit">
+            Create
+            </button>
+        </form>
+    </div>
+
+
+{% endblock %}

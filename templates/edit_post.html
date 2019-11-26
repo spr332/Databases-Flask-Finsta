@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}
+FinstaGram Index title
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-9">
+        <h4><small>Edit Post</small></h4>
+        <hr>
+        -- put photo here in a frame
+        <table class="table table-striped">
+            <th>Groups</th>
+            <th>      </th>
+            {% for group in grplst %}
+                <tr>
+                    <td>{{group.groupName}} </td>
+                    <td>
+                        <span class="input-group-btn">
+                          <form action="/groupAddToPhoto" method="POST">
+                          <button class="btn btn-default" name="fren" value="{{group.groupName}} " type="submit">
+                            Let See
+                          </button>
+                          </form>
+                        </span>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+{% endblock %}

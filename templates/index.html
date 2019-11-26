@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}
+FinstaGram Index title
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-9">
+        <h4><small>Recent Things</small></h4>
+        <hr>
+        <h5>This was made in notepad++</h5>
+        <p>It was absolutely necessary to tell y'all that!</p>
+        <br><br>
+        <h5>MySQL Snippets</h5>
+        <pre>
+        SELECT photoID
+        FROM SharedWith NATURAL JOIN BelongTo
+        WHERE owner_username = groupOwner AND
+            (member_username = 'TestUser' or groupOwner = 'TestUser')
+        UNION
+        SELECT photoID
+        FROM Photo
+        WHERE allfollowers = 1 
+            AND photoposter IN 
+            (SELECT username_followed
+             FROM Follow
+             WHERE username_follower = "Testuser"
+                AND followstatus = 1) </pre>
+        <pre>
+        INSERT INTO Photo (photoID, postingdate, filepath, allFollowers, caption, photoPoster) VALUES(190455,"9999-12-31 23:59:59","/path1",1,"caption 1", "name22")
+
+        INSERT INTO Friendgroup(groupOwner, groupName, description) VALUES ("name22","Family","This is my groop of family memes")
+
+        INSERT INTO SharedWith(groupOwner, groupName, photoID) VALUES ("name22","Family",190455)
+
+        INSERT INTO BelongTo(member_username, owner_username, groupName) VALUES ("name34","name22","Family")</pre>
+    </div>
+
+
+{% endblock %}

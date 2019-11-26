@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Post A Photo!
+{% endblock %}
+
+{% block head %}
+<h1>Whoa is that a cool post!</h1>
+{% endblock %}
+
+{% block body %}
+<div class="col-sm-9">
+	{% if error %}
+		<p class="error"><strong>Error:</strong> {{error}}</p>
+	{% endif %}
+<form action="/postsubmit" method="POST" enctype="multipart/form-data">
+
+<div class="form-group">
+  <label>Select image</label>
+  <div class="custom-file">
+    <input type="file" class="custom-file-input" name="image" id="image">
+    <label class="custom-file-label" for="image">Select image...</label>
+  </div>
+  <label for="caption">Caption:</label>
+  <textarea class="form-control" rows="5" name="caption" id="caption"></textarea>
+  <label class="checkbox-inline"><input name="all" type="checkbox" value="">All Followers?</label>
+</div>
+
+<button type="submit" class="btn btn-primary">Upload</button>
+
+</form>
+</div>
+{% endblock %}

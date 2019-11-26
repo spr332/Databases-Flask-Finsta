@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}
+FinstaGram Index title
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-9">
+        <h4><small>Browse. The. PEEPS.</small></h4>
+        <hr>
+        <table class="table table-striped">
+            <th>Requested</th>
+            <th>      </th>
+            {% for person in dataNot%}
+                <tr>
+                    <td>{{person.username_follower}} </td>
+                    <td>
+                        <span class="input-group-btn">
+                          <form action="/allowfollower" method="POST">
+                          <button class="btn btn-default" name="fren" value="{{person.username_follower}}" type="submit">
+                            
+                            Allow Follower
+                          </button>
+                          </form>
+                        </span>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <table class="table table-striped">
+            <th>Current</th>
+            <th>      </th>
+            {% for person in dataYes%}
+                <tr>
+                    <td>{{person.username_follower}} </td>
+                    <td>
+                        <span class="input-group-btn">
+                          <form action="/disownfollower" method="POST">
+                          <button class="btn btn-default" name="fren" value="{{person.username_follower}}" type="submit">
+                            Unallow Follower
+                          </button>
+                          </form>
+                        </span>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+{% endblock %}

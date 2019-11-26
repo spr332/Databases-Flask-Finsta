@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Home Page
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+
+{% block body %}
+    <div class="col-sm-9">
+      <h4><small>RECENT POSTS</small></h4>
+      <hr>
+      {% for item in data %}
+      <div class="undef">
+      <div class="thumbnail">
+        <h5>Post by {{ item.photoPoster }}, {{ item.postingdate }}.</h5>
+        <a href="/profile/{{ item.photoPoster }}" target="_blank">
+          <img src="/reaper/{{ item.photoID }}" alt="This image didn't display correctly... ¯\_(ツ)_/¯" style="width:100%">
+        </a>
+        <div class="caption">
+            <p>{{ item.caption }}</p>
+          </div>
+      </div>
+    </div>
+      <br><br>
+      {% endfor %}
+
+    </div>
+{% endblock %}

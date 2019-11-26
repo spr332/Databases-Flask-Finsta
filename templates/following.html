@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}
+FinstaGram Index title
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-9">
+        <h4><small>Browse. The. PEEPS.</small></h4>
+        <hr>
+        
+        <table class="table table-striped">
+            <th>Currently following</th>
+            <th>      </th>
+            <th>      </th>
+            {% for person in dataYes%}
+                <tr>
+                    <td>{{person.username_followed}} </td>
+                    <td>
+                        <span class="input-group-btn">
+                          <form action="/viewfollowing" method="POST">
+                          <button class="btn btn-default" name="fren" value="{{person.username_followed}}" type="submit">
+                            See Content
+                          </button>
+                          </form>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="input-group-btn">
+                          <form action="/deletefollow" method="POST">
+                          <button class="btn btn-default" name="fren" value="{{person.username_followed}}" type="submit">
+                            delete follow
+                          </button>
+                          </form>
+                        </span>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table><br><br>
+        <table class="table table-striped">
+            <th>Requested</th>
+            <th>      </th>
+            {% for person in dataNot%}
+                <tr>
+                    <td>{{person.username_followed}} </td>
+                    <td>
+                        <span class="input-group-btn">
+                          <form action="/deletefollow" method="POST">
+                          <button class="btn btn-default" name="fren" value="{{person.username_followed}}" type="submit">
+                            delete request
+                          </button>
+                          </form>
+                        </span>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+{% endblock %}
