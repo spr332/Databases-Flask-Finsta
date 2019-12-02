@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}
+FinstaGram Index title
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-9">
+        <h4><small>Add. Your. GROUPS.</small></h4>
+        <hr>
+        <table class="table table-striped">
+            <th>Currently Allowed</th>
+            <th>      </th>
+            {% for grp in dataYes%}
+                <tr>
+                    <td>{{grp.groupName}} </td>
+                    <td>
+                        <span class="input-group-btn">
+                          <form action="/rmphoto5group" method="POST">
+                          <button class="btn btn-default" name="grp" value="{{grp.groupName}}" type="submit">
+                            Remove Photo from Group
+                          </button>
+                          <input type="hidden"  name="pid" value="{{pid}}">
+                          </form>
+                        </span>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        
+        <table class="table table-striped">
+            <th>Currently Not Allowed</th>
+            <th>      </th>
+            {% for grp in dataNot%}
+                <tr>
+                    <td>{{grp.groupName}} </td>
+                    <td>
+                        <span class="input-group-btn">
+                          <form action="/addphoto2group" method="POST">
+                          <button class="btn btn-default" name="grp" value="{{grp.groupName}}" type="submit">
+                            Add Photo to Group
+                          </button>
+                          <input type="hidden"  name="pid" value="{{pid}}">
+                          </form>
+                        </span>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+{% endblock %}

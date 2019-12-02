@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Home Page
+My Tags
 {% endblock %}
 
 {% block head %}
@@ -10,7 +10,7 @@ Home Page
 
 {% block body %}
     <div class="col-sm-9">
-      <h4><small>RECENT POSTS</small></h4>
+      <h4><small>RECENT TAGS</small></h4>
       <hr>
       {% for item in data %}
       <div class="undef">
@@ -19,9 +19,14 @@ Home Page
         <a href="/imginfo/{{ item.photoID }}" target="_blank">
           <img src="/image/{{ item.photoID }}" alt="This image didn't display correctly... ¯\_(ツ)_/¯" style="width:100%">
         </a>
-        <div class="caption">
-            <p>{{ item.caption }}</p>
-          </div>
+        <span class="input-group-btn">
+          <form action="/accepttag" method="POST">
+          <button class="btn btn-default" name="yes" value="" type="submit">
+            Accept Tag
+          </button>
+          <input type="hidden"  name="pid" value="{{ item.photoID }}">
+          </form>
+        </span>
       </div>
     </div>
       <br><br>

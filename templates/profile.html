@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Home Page
+Profile Page
 {% endblock %}
 
 {% block head %}
@@ -16,16 +16,27 @@ Home Page
       <div class="undef">
       <div class="thumbnail">
         <h5>Post by {{ item.photoPoster }}, {{ item.postingdate }}.</h5>
-        <a href="/profile/{{ item.photoPoster }}" target="_blank">
-          <img src="/reaper/{{ item.photoID }}" alt="This image didn't display correctly... ¯\_(ツ)_/¯" style="width:100%">
+        <a href="/imginfo/{{ item.photoID }}" target="_blank">
+          <img src="/image/{{ item.photoID }}" alt="This image didn't display correctly... ¯\_(ツ)_/¯" style="width:100%">
         </a>
         <div class="row-sm-9">
           <div class="caption">
             <p>{{ item.caption }}</p>
           </div>
-          <div>
           {% if delete %}
-            
+            <div>
+            <a href="/addtags/{{item.photoID}}">
+            <span class="input-group-btn">
+            <button class="btn btn-default"   type="submit">
+            Tag Your Friends
+            </button>
+            </span>
+            </a>
+            </div>
+          {% endif %}
+          
+          {% if delete %}
+            <div>
             <form action="/removephoto" method="POST">
             <span class="input-group-btn">
             <button class="btn btn-default"   type="submit">
@@ -34,9 +45,8 @@ Home Page
             </span>
             <input type='hidden' name='pid' value= "{{item.photoID}}"  />
             </form>
-           
+            </div>
           {% endif %}
-          </div>
         </div>
       </div>
     </div>

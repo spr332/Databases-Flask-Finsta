@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Image Info
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-9">
+        <h4><small>This image</small></h4>
+        <hr>
+        <div class="undef">
+      <div class="thumbnail">
+        <h5>Post by {{ person.firstName }} {{ person.lastName }}</h5>
+          <img src="/image/{{ item.photoID }}" alt="This image didn't display correctly... ¯\_(ツ)_/¯" style="width:100%">
+        <table class="table table-striped">
+            <th>      </th>
+            <th>      </th>
+                <tr>
+                    <td>
+                    username
+                    </td>
+                    <td>
+                    {{ person.username }}
+                    </td>
+                <tr>
+                <tr>
+                    <td>
+                    Date
+                    </td>
+                    <td>
+                    {{ item.postingdate }}
+                    </td>
+                <tr>
+                <tr>
+                    <td>
+                    Caption
+                    </td>
+                    <td>
+                    {{ item.caption }}
+                    </td>
+                <tr>
+        </table><br><br>
+        <table class="table table-striped">
+            <th>Tagged Peeps</th>
+            {% for tag in tags %}
+                <tr>
+                    <td>
+                    {{tag.username}}
+                    </td>
+                <tr>
+            {% endfor %}
+        </table><br><br>
+    </div>
+
+
+{% endblock %}

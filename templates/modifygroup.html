@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}
+FinstaGram Index title
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-9">
+        <h4><small>Your Group {{ gname }}</small></h4>
+        <hr>
+        <h4><small>{{ gtit }}</small></h4>
+        <hr>
+        <table class="table table-striped">
+            <th>Current Members</th>
+            <th>      </th>
+            {% for person in dataYes%}
+                <tr>
+                    <td>{{person.username}} </td>
+                    <td>
+                        <span class="input-group-btn">
+                          <form action="/rmfromgroup" method="POST">
+                          <button class="btn btn-default" name="fren" value="{{person.username}}" type="submit">
+                            REMOVE
+                          </button>
+                           <input type="hidden"  name="groop" value="{{gname}}">
+                          </form>
+                        </span>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <table class="table table-striped">
+            <th>Add Peeps</th>
+            <th>      </th>
+            {% for person in dataNot%}
+                <tr>
+                    <td>{{person.username}} </td>
+                    <td>
+                        <span class="input-group-btn">
+                          <form action="/addtogroup" method="POST">
+                          <button class="btn btn-default" name="fren" value="{{person.username}}" type="submit">
+                            ADD
+                          </button>
+                          <input type="hidden"  name="groop" value="{{gname}}">
+                          </form>
+                        </span>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <div class="col-sm-9">
+        <hr><hr>        
+            <h4><small>RECENT POSTS</small></h4>
+            <hr>
+            {% for item in photos %}
+            <div class="undef">
+            <div class="thumbnail">
+                <h5>Post by {{ item.photoPoster }}, {{ item.postingdate }}.</h5>
+                <a href="/profile/{{ item.photoPoster }}" target="_blank">
+                <img src="/image/{{ item.photoID }}" alt="This image didn't display correctly... ¯\_(ツ)_/¯" style="width:100%">
+                </a>
+                <div class="caption">
+                <p>{{ item.caption }}</p>
+                </div>
+            </div>
+            </div>
+            <br><br>
+            {% endfor %}
+        </div>
+        
+    </div>
+
+
+{% endblock %}
