@@ -10,6 +10,7 @@ from werkzeug.utils import secure_filename
 from datetime import datetime
 import time
 
+
 app = Flask(__name__)
 app.secret_key = '''5d1f4aa2ca12aefa18e25628ba680e81f2fb1f
                     7dde78c174396228cc3170285e8a459037bb21
@@ -26,7 +27,8 @@ conn =   pymysql.connect(host       = sys.argv[1],
                            db       = sys.argv[5],
                            charset  = sys.argv[6],
                            cursorclass=pymysql.cursors.DictCursor)
-                           
+
+
 ####################
 ##  LOGIN STUFFS  ##
 ####################
@@ -189,6 +191,7 @@ def imagegetter(photoID):
             cursor.execute(query, (photoID))
             data = cursor.fetchone()
             head_tail = os.path.split(data['filepath'])
+
         return send_from_directory(head_tail[0], head_tail[1])
     else:
         return send_from_directory(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'static'), "ERROR.png")
@@ -254,24 +257,10 @@ def pickgroups(photoID):
     if not data:
         redirect('/')
     with conn.cursor() as cursor:
-        query = '''SELECT * FROM `Friendgroup` 
-                    WHERE `groupOwner` = %s and
-                    `groupName` not in
-                    (
-                        select groupName from SharedWith 
-                            where groupOwner=%s and 
-                            photoID = %s
-                    )'''
+        query = '''SELECT * FROM `Friendgroup` WHERE `groupOwner` = %s and `groupName` not in (select groupName from SharedWith where groupOwner=%s and  photoID = %s)'''
         cursor.execute(query, (session['username'], session['username'], pid))
         dataNot = cursor.fetchall()
-        query = '''SELECT * FROM `Friendgroup` 
-                    WHERE `groupOwner` = %s and
-                    `groupName` in
-                    (
-                        select groupName from SharedWith 
-                            where groupOwner=%s and 
-                            photoID = %s
-                    )'''
+        query = '''SELECT * FROM `Friendgroup` WHERE `groupOwner` = %s and `groupName` in (select groupName from SharedWith where groupOwner=%s and photoID = %s )'''
         cursor.execute(query, (session['username'], session['username'], pid))
         dataYes = cursor.fetchall()
         
@@ -285,27 +274,20 @@ def rm5group():
         return redirect('/')
     data = None
     with conn.cursor() as cursor:
-        query ='''SELECT * FROM Friendgroup
-                    WHERE groupOwner = %s AND
-                        groupName = %s '''
+        query ='''SELECT * FROM Friendgroup WHERE groupOwner = %s AND groupName = %s '''
         cursor.execute(query,(session['username'],request.form['grp']))
         data= cursor.fetchall()
     if not data: ##Make sure they own the group
         return redirect('/mygroups')
     with conn.cursor() as cursor:
-        query = ''' SELECT * FROM `Photo` 
-                    WHERE `photoPoster`=%s AND 
-                        `photoID`= %s '''
+        query = ''' SELECT * FROM `Photo`  WHERE `photoPoster`=%s AND `photoID`= %s '''
         cursor.execute(query,(session['username'],request.form['pid']))
         data= cursor.fetchall()
     if not data: ##Make sure they own th photo
         return redirect('/mygroups')
     with conn.cursor() as cursor:
         query = '''
-                DELETE FROM `SharedWith` WHERE 
-                `groupOwner` = %s AND 
-                `groupName` = %s AND `photoID` = %s
-                '''
+                DELETE FROM `SharedWith` WHERE `groupOwner` = %s AND groupName` = %s AND `photoID` = %s'''
         cursor.execute(query, (session['username'], request.form['grp'], request.form['pid']))
         conn.commit()
     return redirect("/pickgroups/"+request.form['pid'])
@@ -317,17 +299,13 @@ def add2group():
         return redirect('/')
     data = None
     with conn.cursor() as cursor:
-        query ='''SELECT * FROM Friendgroup
-                    WHERE groupOwner = %s AND
-                        groupName = %s '''
+        query ='''SELECT * FROM Friendgroup WHERE groupOwner = %s AND groupName = %s '''
         cursor.execute(query,(session['username'],request.form['grp']))
         data= cursor.fetchall()
     if not data: ##Make sure they own the group
         return redirect('/mygroups')
     with conn.cursor() as cursor:
-        query = ''' SELECT * FROM `Photo` 
-                    WHERE `photoPoster`=%s AND 
-                        `photoID`= %s '''
+        query = ''' SELECT * FROM `Photo` WHERE `photoPoster`=%s AND `photoID`= %s '''
         cursor.execute(query,(session['username'],request.form['pid']))
         data= cursor.fetchall()
     if not data: ##Make sure they own the photo
@@ -380,9 +358,7 @@ def modifygroup(groupN):
     photos = []
     gtit=None
     with conn.cursor() as cursor:
-        query = """SELECT * FROM Friendgroup
-                   WHERE groupOwner = %s AND
-                        groupName = %s"""
+        query = """SELECT * FROM Friendgroup WHERE groupOwner = %s AND groupName = %s"""
         cursor.execute(query,(session['username'], groupN))
         gtit = cursor.fetchone()
         
@@ -390,33 +366,13 @@ def modifygroup(groupN):
         return redirect('/mygroups')
     with conn.cursor() as cursor:
         gtit = gtit['description']
-        query = """ SELECT * FROM Person WHERE username IN
-                (SELECT member_username from BelongTo 
-                WHERE owner_username = %s AND
-                groupName = %s)"""
+        query = """ SELECT * FROM Person WHERE username IN (SELECT member_username from BelongTo  WHERE owner_username = %s AND groupName = %s)"""
         cursor.execute(query,(session['username'], groupN))
         dataYes = cursor.fetchall()
-        query = """ SELECT * FROM Person WHERE username IN
-                (
-                SELECT username_follower FROM Follow 
-                    WHERE username_followed = %s AND
-                        followstatus = 1 AND
-                        username_follower NOT IN
-                            (
-                            SELECT member_username from BelongTo 
-                            WHERE owner_username = %s AND
-                            groupName = %s
-                            )
-                )"""
+        query = """ SELECT * FROM Person WHERE username IN( SELECT username_follower FROM Follow   WHERE username_followed = %s AND  followstatus = 1 AND username_follower NOT IN ( SELECT member_username from BelongTo  WHERE owner_username = %s AND groupName = %s ) )"""
         cursor.execute(query,(session['username'],session['username'], groupN))
         dataNot = cursor.fetchall()
-        query = """SELECT * FROM Photo
-                   WHERE photoID IN
-                   (
-                        SELECT photoID FROM SharedWith
-                        WHERE groupOwner = %s AND
-                            groupName = %s
-                   )"""
+        query = """SELECT * FROM Photo WHERE photoID IN( SELECT photoID FROM SharedWith WHERE groupOwner = %s AND groupName = %s )"""
         cursor.execute(query,(session['username'], groupN))
         photos = cursor.fetchall()    
     return render_template('modifygroup.html', gtit = gtit, gname = groupN, dataYes=dataYes, dataNot=dataNot, photos=photos)
@@ -427,27 +383,21 @@ def addtogroup():
     if request.method != "POST" or 'groop' not in request.form or 'fren' not in request.form:
         return redirect('/')
     with conn.cursor() as cursor:
-        query ='''SELECT * FROM Friendgroup
-                    WHERE groupOwner = %s AND
-                        groupName = %s '''
+        query ='''SELECT * FROM Friendgroup WHERE groupOwner = %s AND groupName = %s '''
         cursor.execute(query,(session['username'],request.form['groop']))
         data= cursor.fetchall()
     if not data: ##Make sure they own the group
         return redirect('/mygroups')
     data = None
     with conn.cursor() as cursor:
-        query = ''' SELECT * FROM `Follow` 
-                    WHERE `username_followed`=%s AND 
-                        `username_follower`=%s AND
-                        `followstatus`= 1'''
+        query = ''' SELECT * FROM `Follow`  WHERE `username_followed`=%s AND  `username_follower`=%s AND `followstatus`= 1'''
         cursor.execute(query,(session['username'],request.form['fren']))
         data= cursor.fetchall()
     if not data: ##Make sure they have the follower
         return redirect('/mygroups')
     with conn.cursor() as cursor:
         query = '''
-                INSERT INTO `BelongTo`(`member_username`, `owner_username`, `groupName`) 
-                VALUES (%s, %s, %s)
+                INSERT INTO `BelongTo`(`member_username`, `owner_username`, `groupName`) VALUES (%s, %s, %s)
                 '''
         cursor.execute(query, (request.form['fren'],session['username'], request.form['groop']))
         conn.commit()
@@ -652,6 +602,13 @@ def myprofile():
         return redirect('/')
     return redirect('/profile/'+session['username'])
 
+
+
+
+        
+
+            
+            
 @app.route('/profile/<AUserName>')
 @login_required
 def profileview(AUserName):
@@ -662,9 +619,11 @@ def profileview(AUserName):
         
         #All "my" photos
         query = 'SELECT * FROM Photo WHERE photoPoster = %s '
+
         with conn.cursor() as cursor:
             cursor.execute(query, (AUserName))
             data = cursor.fetchall()
+
         CD = [(i['postingdate'], i) for i in data]
         CD.sort()
         data = [i[1] for i in CD]
@@ -800,37 +759,11 @@ def accepttag():
     return redirect('/mytags')
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+def errorout(name, action, redirect):
+    error["name"] = name
+    error["action"] = action
+    error["redirect"] = redirect
+    return render_template('/failure', err=error)
 
 if __name__ == "__main__":
     if not os.path.isdir("images"):
