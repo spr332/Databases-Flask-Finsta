@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+FinstaGram Index title
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-9">
+        <h4><small>{{ err.name }}</small></h4>
+        <hr>
+        <h5> {{err.action}} </h5>
+        <a href="{{ err.redirect }}>
+        <button class = "btn btn-default" type="button">
+            Go back
+        </button>
+        </a>
+    </div>
+
+
+{% endblock %}
